@@ -5,12 +5,12 @@ pragma solidity ^0.8.27;
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 interface IPermisos {
-    function hasPermissions(address _addr) external view returns (bool _permission);
+    function hasPermision(address _addr) external view returns (bool _permision);
 }
 
 contract Token is ERC20 {
 
-    error NoPermission(address _adr);
+    error NoPermission(address _addr);
 
     IPermisos immutable public permisos;
 
@@ -19,13 +19,15 @@ contract Token is ERC20 {
         permisos = _permisos;
     }
 
-    function transfer(address to, uint256 value) public override returns (bool) {
-        if (!permisos.hasPermissions(to)) revert NoPermission(to);
-        return super.transfer(to, value);
+
+    function transfer(address to, uint256 value) public override  returns (bool) {
+        if (!permisos.hasPermision(to)) revert NoPermission(to);
+        return super.transfer(to,value);
     }
 
     function transferFrom(address from, address to, uint256 value) public override returns (bool) {
-        if (!permisos.hasPermissions(to)) revert NoPermission(to);
-        return super.transferFrom(from, to, value);
+        if (!permisos.hasPermision(to)) revert NoPermission(to);
+        return super.transferFrom(from,to,value);
     }
+
 }
